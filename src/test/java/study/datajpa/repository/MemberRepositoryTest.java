@@ -76,6 +76,21 @@ class MemberRepositoryTest {
             System.out.println("member = " + member);
         }
         System.out.println("totalElements = " + totalElements);*/
+    }
 
+    @Test
+    public void bulkUpdate() throws Exception {
+        //given
+        Member member1 = memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        Member member5 = memberRepository.save(new Member("member5", 40));
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+        //then
+        assertThat(resultCount).isEqualTo(3);
+        assertThat(member5.getAge()).isEqualTo(40);
+        System.out.println("Member5= " + member5.getAge());
     }
 }
