@@ -3,7 +3,6 @@ package study.datajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -11,9 +10,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -22,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
+    @Autowired
+    EntityManager em;
 
     @Test
     public void testMember(){
@@ -92,5 +93,18 @@ class MemberRepositoryTest {
         assertThat(resultCount).isEqualTo(3);
         assertThat(member5.getAge()).isEqualTo(40);
         System.out.println("Member5= " + member5.getAge());
+    }
+
+    @Test
+    public void queryHint(){
+        Member member1 = memberRepository.save(new Member("meber1", 10));
+        em.flush();
+        em.clear();
+
+        Member findMember = memberRepository.findReadOnlyByUsername(member1.getUsername());
+        findMember.setUsername("member2");
+
+        em.flush();
+
     }
 }
