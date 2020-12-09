@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // protected 생성자 자동 생성
 @ToString(of = {"id", "userName", "age"}) // 연관관계 필드인 team은 빼고, 무한루프에 빠질 수 있음
-public class Member {
+public class Member extends BaseEntity{
 
     @Id @GeneratedValue
     @Column(name = "member_id")
